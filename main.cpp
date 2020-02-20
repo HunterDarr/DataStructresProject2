@@ -18,6 +18,7 @@ public:
     double getXValue(); //return x
     double getYValue(); //return y
     void display(); // Print (0.0, 0.0)
+    void display(ostream& s);
 };
 
 template <class T>
@@ -51,6 +52,17 @@ double Point<T>::getYValue() {
 template <class T>
 void Point<T>::display() {
     cout<< "(" << x << ", " << y << ")" << endl; // Formatted in this manner (x, y)
+}
+
+template <class T>
+void Point<T>::display(ostream& s) {
+    s << "(" << x << ", " << y << ")";
+}
+
+template <class T>
+ostream& operator<<(ostream& s, Point<T>& p) {
+    p.display(s);
+    return s;
 }
 
 template <class T>
@@ -262,6 +274,7 @@ public:
     void addLineSegment (LineSegment<T> L);
     void display();
     LineSegment<T> getLine (int arrayIndex);
+    Segments<T> &findAllIntersection(LineSegment<T>& ls);
 };
 
 template<class T>
@@ -282,6 +295,12 @@ template<class T>
 void Segments<T>::addLineSegment(LineSegment<T> L) {
     segments[count] = L; //Adds a new line segment in the array at index count.
     count = count + 1; //Increases count by 1.
+}
+
+template <class T>  //Finish
+Segments<T>& Segments<T>::findAllIntersection(LineSegment<T> &ls) {
+
+    return NULL;
 }
 
 template<class T>
@@ -380,6 +399,7 @@ int main() {
         cin >> linePoint1 >> linePoint2 >> linePoint3 >> linePoint4; // Inputs the x and y values of a line segment
         Point<double> pointOne (linePoint1, linePoint2);
         Point<double> pointTwo (linePoint3, linePoint4);
+        cout << "TEST OF POINT COUT: " << pointOne << endl; // TESTING CODE SDOJHFDISOHF
         LineSegment<double> line (pointOne, pointTwo);
         interval.addLineSegment(line); // Adds the new line segment to the Interval class's array
     }
