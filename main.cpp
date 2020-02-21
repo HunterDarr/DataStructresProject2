@@ -133,6 +133,7 @@ public:
     void displayEquation (); // Prints in the format y=mx+b
     Point<T> getP1 ();
     Point<T> getP2 ();
+    void display(ostream& s);
 };
 
 template<class T>
@@ -261,6 +262,24 @@ template<class T>
 Point<T> LineSegment<T>::getP2() {
     return P2;
 }
+
+template <class T>
+void LineSegment<T>::display(ostream& s) {
+    s << "(" << Math<T>::round(getP1().getXValue()) << ", " << Math<T>::round(getP1().getYValue()) << "),(" <<
+      Math<T>::round(getP2().getXValue()) << ", " << Math<T>::round(getP2().getYValue()) << ")\n" <<
+      "Slope:" << Math<T>::round(slope()) << "\n" << "Midpoint:" << "(" << midpoint().getXValue() << ", " <<
+      midpoint().getYValue() << ")\n" << "X Intercept:" << Math<T>::round(xIntercept()) << "\n" <<
+      "Y Intercept:" << Math<T>::round(yIntercept()) << "\n" << "Length:" << Math<T>::round(length()) << "\n" <<
+      "y=" << Math<T>::round(slope()) << "*x+" << Math<T>::round(yIntercept());
+}
+
+template <class T>
+ostream& operator<<(ostream& s, LineSegment<T>& p) {
+    p.display(s);
+    return s;
+}
+
+
 
 template<class T>
 class Segments {
@@ -401,6 +420,7 @@ int main() {
         Point<double> pointTwo (linePoint3, linePoint4);
         cout << "TEST OF POINT COUT: " << pointOne << endl; // TESTING CODE SDOJHFDISOHF
         LineSegment<double> line (pointOne, pointTwo);
+        cout << "TESTING LINESEGMENT COUT: \n" << line << endl;
         interval.addLineSegment(line); // Adds the new line segment to the Interval class's array
     }
 
