@@ -6,6 +6,58 @@ using namespace std;
 //    cout << x << " " << y << endl;
 //}
 
+
+class Exception {
+protected:
+    string message;
+public:
+    Exception();
+    Exception (string newException);
+    string getMessage();
+};
+
+Exception::Exception()   {
+
+}
+
+Exception::Exception(string newException) {
+    message = newException;
+}
+
+string Exception::getMessage() {
+    return "\n--=={Exception: " + message + "}==--\n";
+}
+
+
+class LineSegmentException: public Exception {
+public:
+    LineSegmentException (string newException);
+    string getMessage();
+};
+
+LineSegmentException::LineSegmentException(string newException) {
+    message = newException;
+}
+
+string LineSegmentException::getMessage() {
+    return "\n--=={Line Segment Exception: " + message + "}==--\n";
+}
+
+class SegmentsException: public Exception {
+public:
+    SegmentsException (string newException);
+    string getMessage();
+};
+
+SegmentsException::SegmentsException(string newException) {
+    message = newException;
+}
+
+string SegmentsException::getMessage() {
+    return "\n--=={Segments Exception: " + message + "}==--\n";
+}
+
+
 template <class T>
 class Point {
 protected:
@@ -159,6 +211,14 @@ double LineSegment<T>::length() {
 }
 template<class T>
 Point<T> LineSegment<T>::midpoint() {
+    try {
+        if (length() == 0)   {
+            throw LineSegmentException("midpoint of the line segment has a length of 0.");
+        }
+    }
+    catch (LineSegmentException e)   {
+        cout << e.getMessage();
+    }
     double xValue = Math<T>::round((x1 + x2)/2);
     double yValue = Math<T>::round((y1 + y2)/2);
     Point<T> midPoint(xValue, yValue);
@@ -319,6 +379,7 @@ void Segments<T>::addLineSegment(LineSegment<T> L) {
 template <class T>  //Finish
 Segments<T>& Segments<T>::findAllIntersection(LineSegment<T> &ls) {
 
+
     return NULL;
 }
 
@@ -352,55 +413,6 @@ LineSegment<T> Segments<T>::getLine(int arrayIndex) {
 }
 
 
-class Exception {  //Exceptions NEED to be worked on
-protected:
-    string message;
-public:
-    Exception();
-    Exception (string newException);
-    string getMessage();
-};
-
-Exception::Exception()   {
-
-}
-
-Exception::Exception(string newException) {
-    message = newException;
-}
-
-string Exception::getMessage() {
-    return "--=={Exception: " + message + "}==--";
-}
-
-
-class LineSegmentException: public Exception {
-public:
-    LineSegmentException (string newException);
-    string getMessage();
-};
-
-LineSegmentException::LineSegmentException(string newException) {
-    message = newException;
-}
-
-string LineSegmentException::getMessage() {
-    return "--=={Line Segment Exception: " + message + "}==--";
-}
-
-class SegmentsException: public Exception {
-public:
-    SegmentsException (string newException);
-    string getMessage();
-};
-
-SegmentsException::SegmentsException(string newException) {
-    message = newException;
-}
-
-string SegmentsException::getMessage() {
-    return "--=={Segments Exception: " + message + "}==--";
-}
 
 int main() {
 
