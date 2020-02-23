@@ -350,10 +350,12 @@ protected:
 public:
     Segments (); //Defualt constructor
     Segments (int size); //non-default constructor
+    ~Segments();
     void addLineSegment (LineSegment<T> L);
     void display();
     LineSegment<T> getLine (int arrayIndex);
     Segments<T> &findAllIntersection(LineSegment<T> ls);
+    void display(ostream& s);
 };
 
 template<class T>
@@ -395,26 +397,28 @@ Segments<T>& Segments<T>::findAllIntersection(LineSegment<T> ls) {
     return intersectingSegments;
 }
 
+
 template<class T>
 void Segments<T>::display() {
     int segmentCounter = 1; // Keeps count of what line segment is being displayed
     for ( int i = 0; i < count; i++ )   {
         cout << "Line Segment " << segmentCounter << ":" << endl; // Line Segment #:
-        cout << "(" << Math<T>::round(segments[i].getP1().getXValue()) << ", " << Math<T>::round(segments[i].getP1().getYValue()) << "),(" <<
-             Math<T>::round(segments[i].getP2().getXValue()) << ", " << Math<T>::round(segments[i].getP2().getYValue()) << ")" << endl;
-        // (x, y),(x, y)
-
-        cout << "Slope:" << Math<T>::round(segments[i].slope()) << endl; // Slope:m
-
-        cout << "Midpoint:";
-        segments[i].midpoint().display(); //Midpoint:(x, y)
-
-        cout << "X Intercept:" << Math<T>::round(segments[i].xIntercept()) << endl; // X Intercept:x
-        cout << "Y Intercept:" << Math<T>::round(segments[i].yIntercept()) << endl; // Y Intercept:y
-
-        cout << "Length:" << Math<T>::round(segments[i].length()) << endl; // Length:#
-
-        segments[i].displayEquation(); // y=mx+b
+        cout << segments[i] << endl;
+//        cout << "(" << Math<T>::round(segments[i].getP1().getXValue()) << ", " << Math<T>::round(segments[i].getP1().getYValue()) << "),(" <<
+//             Math<T>::round(segments[i].getP2().getXValue()) << ", " << Math<T>::round(segments[i].getP2().getYValue()) << ")" << endl;
+//        // (x, y),(x, y)
+//
+//        cout << "Slope:" << Math<T>::round(segments[i].slope()) << endl; // Slope:m
+//
+//        cout << "Midpoint:";
+//        segments[i].midpoint().display(); //Midpoint:(x, y)
+//
+//        cout << "X Intercept:" << Math<T>::round(segments[i].xIntercept()) << endl; // X Intercept:x
+//        cout << "Y Intercept:" << Math<T>::round(segments[i].yIntercept()) << endl; // Y Intercept:y
+//
+//        cout << "Length:" << Math<T>::round(segments[i].length()) << endl; // Length:#
+//
+//        segments[i].displayEquation(); // y=mx+b
         segmentCounter = segmentCounter + 1;
     }
 }
@@ -423,6 +427,24 @@ template<class T>
 LineSegment<T> Segments<T>::getLine(int arrayIndex) {
     return segments[arrayIndex];
 }
+
+template <class T>
+Segments<T>::~Segments() {
+    delete []segments;
+}
+
+template <class T>
+void Segments<T>::display(ostream &s) {
+    display();
+    s << "";
+}
+
+template <class T>
+ostream& operator<<(ostream& s, Segments<T>& p) {
+    p.display(s);
+    return s;
+}
+
 
 
 
@@ -447,11 +469,14 @@ int main() {
 //        cout << "TESTING LINESEGMENT COUT: \n" << line << endl;
         interval.addLineSegment(line); // Adds the new line segment to the Interval class's array
     }
+    cout << "Testing <<: \n" << interval << endl;
     interval.display(); // Displays the information about the line segments
+
 
     cout << "\n\n\n\n\n\n\n" << "findAllInterects:" << endl;
     Segments<double> newarray = interval.findAllIntersection(interval.getLine(3));
     newarray.display();
+
 
 //
 //    bool doesIntersect = false;
