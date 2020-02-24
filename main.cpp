@@ -564,22 +564,29 @@ int main() {
                 Point<double> pointOne (linePoint1, linePoint2);
                 Point<double> pointTwo (linePoint3, linePoint4);
                 LineSegment<double> line (pointOne, pointTwo);
+                bool throwException = true;
                 try    {
                     for (int i = 0; i < segments.getCount(); i++ ){
-                        if (!((segments.getLine(i).getP1().getYValue() == line.getP1().getYValue() &&
+                        if (((segments.getLine(i).getP1().getYValue() == line.getP1().getYValue() &&
                               segments.getLine(i).getP1().getXValue() == line.getP1().getXValue()) && (segments.getLine(i).getP2().getYValue() == line.getP2().getYValue() &&
                               segments.getLine(i).getP2().getXValue() == line.getP2().getXValue())))   {
-                            throw SegmentsException("line segment not found");
+                            segments.removeLineSegment(line);
+                            cout << "Line segment removed\n" << endl;
+                            throwException = false;
                         }
+                    }
+                    if (throwException)   {
+                        throw SegmentsException("line segment not found");
+                    }
+                    else   {
+                        break;
                     }
                 }
                 catch (SegmentsException e)   {
                     cout << e.getMessage() << endl;
                     break;
                 }
-                segments.removeLineSegment(line);
-                cout << "Line segment removed\n" << endl;
-                break;
+
             }
             case 'D': {
                     cout << segments << endl;
