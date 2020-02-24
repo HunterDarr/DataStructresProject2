@@ -598,9 +598,24 @@ int main() {
                         }
                     }
                 }
+                cout << "\n";
                 break;
             }
-            case 'C': {}
+            case 'C': {
+                cin >> linePoint1 >> linePoint2;
+                Point<double> pointOne (linePoint1, linePoint2);
+
+                cout << "The Line segment closest to the given point is:";
+                for (int i = 0; i < segments.getCount(); i++ )   {
+                    if (((segments.getLine(i).getP1().getYValue() == segments.findClosest(pointOne).getP1().getYValue() &&
+                          segments.getLine(i).getP1().getXValue() == segments.findClosest(pointOne).getP1().getXValue()) && (segments.getLine(i).getP2().getYValue() == segments.findClosest(pointOne).getP2().getYValue() &&
+                          segments.getLine(i).getP2().getXValue() == segments.findClosest(pointOne).getP2().getXValue())))   {
+                        cout << "Line segment " << i + 1 << endl; //TODO MIGHT NEED TO CHANGE
+                    }
+                }
+                break;
+
+            }
             default: cout << "Invalid command" << endl;
         }
     }
