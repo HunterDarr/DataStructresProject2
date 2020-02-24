@@ -419,15 +419,10 @@ double Segments<T>::distance(Point<T> P, LineSegment<T> L) {
     m = L.slope();
     c = L.yIntercept();//Assume yIntercept function returns double value. If yIntercept function returns Point, c = L.yIntercept().getYvalue(); Just be consistent with the function in Project 1.
     denominator = Math<T>::squareroot(1 + (m * m));
-//cout << "Distance called" << endl;
-//    numerator = m*x0 + y0 + c; //Testing only
-//    cout << "Numerator test 1: " << numerator << endl;
-
-    numerator = Math<T>::abs(m*x0 + y0 + c);
-//    cout << "Numerator test 2: " << numerator << endl;
+    double pre = m*x0 + y0 + c;
+    numerator = Math<T>::abs(pre);
 
     distance = numerator/denominator;
-//    cout << "final distance: " << distance << endl;
     return distance;
 }
 
