@@ -156,11 +156,17 @@ double Math<T>::squareroot(T number) {
 
 
 template <class T>
-T Math<T>::round(T var) {
-    T value = (int)(var * 100.0);
-    T result = (double)value / 100.0;
-//    cout << "This is a test of round: " << result << endl;
-    return result;
+T Math<T>::round(T num) {
+    double rndnum;
+    double num2 = num * 100;
+    int num3 = (int)num2;
+    double dec3 = num2 - num3;
+    if ((dec3*10) >= 5) {
+        rndnum = ((int)((num)*100))/100.00 + 0.01;
+    } else {
+        rndnum= ((int)((num)*100))/100.00;
+    }
+    return rndnum;
 }
 
 template <class T>
