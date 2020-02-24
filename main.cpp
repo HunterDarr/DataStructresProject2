@@ -1,8 +1,32 @@
+/**
+ * CS-2413
+ * project2.cpp
+ * Purpose: Create line segments given x and y values for points and
+ * then calculate various mathematical functions regarding the line segments.
+ *
+ * @author Hunter Darr
+ * @Version 2.0 2/24/2020
+ */
+
+
 #include <iostream>
 using namespace std;
 
 
-
+/**
+ * Description:
+ * The Exception class is used to throw and catch exceptions.
+ * message, is determined by the user through Exception (string newException).
+ *
+ *
+ * Constructors:
+ * - Exception(); Default Constructor.
+ * - Exception (string newException); Non-default constructor.
+ *   Sets the protected class variable, message.
+ *
+ * Methods:
+ * - string getMessage(); Returns the exception message to be printed out to the console.
+ */
 class Exception {
 protected:
     string message;
@@ -13,7 +37,7 @@ public:
 };
 
 Exception::Exception()   {
-
+    //Should not be used
 }
 
 Exception::Exception(string newException) {
@@ -21,10 +45,25 @@ Exception::Exception(string newException) {
 }
 
 string Exception::getMessage() {
-    return "\n--=={Exception: " + message + "}==--\n";
+    return "Exception," + message + "\n";
 }
 
 
+/**
+ * Description:
+ * The LineSegmentException class is used to throw and catch line segment exceptions.
+ * message, is determined by the user through LineSegmentException (string newException).
+ * LineSegmentExcpetion is a sub class of Exception.
+ *
+ *
+ * Constructors:
+ * - LineSegmentException(); Default Constructor.
+ * - LineSegmentException (string newException); Non-default constructor.
+ *   Sets the protected class variable, message.
+ *
+ * Methods:
+ * - string getMessage(); Returns the exception message to be printed out to the console.
+ */
 class LineSegmentException: public Exception {
 public:
     LineSegmentException (string newException);
@@ -36,9 +75,25 @@ LineSegmentException::LineSegmentException(string newException) {
 }
 
 string LineSegmentException::getMessage() {
-    return "\n--=={Line Segment Exception: " + message + "}==--\n";  //TODO Might need to change this
+    return "Exception," + message + "\n";
 }
 
+
+/**
+ * Description:
+ * The SegmentsException class is used to throw and catch segments exceptions.
+ * message, is determined by the user through SegmentsException (string newException).
+ * SegmentsExcpetion is a sub class of Exception.
+ *
+ *
+ * Constructors:
+ * - SegmentsException(); Default Constructor.
+ * - SegmentsException (string newException); Non-default constructor.
+ *   Sets the protected class variable, message.
+ *
+ * Methods:
+ * - string getMessage(); Returns the exception message to be printed out to the console.
+ */
 class SegmentsException: public Exception {
 public:
     SegmentsException (string newException);
@@ -54,6 +109,25 @@ string SegmentsException::getMessage() {
 }
 
 
+/**
+ * Description:
+ * The Point class is used to store the values of x and y in a point that can be
+ * accessed by different functions/methods.
+ * x and y are provided by input in the main method.
+ *
+ *
+ * Constructors:
+ * - Point(); Default constructor.
+ * - Point(double xvalue, double yvalue); Non-default constructor.
+ *   Sets the protected class variables, x and y, to the xvalue and yvalue parameters.
+ *
+ * Methods:
+ * - setLocation(double xvalue, double yvalue); Sets the x and y class variables.
+ * - getXValue(); A getter function/method for the x class variable.
+ * - getYValue(); A getter function/method for the y class variable.
+ * - display(); Uses cout to print the formatted point to the console.
+ * - display(ostream& s); Overloaded << operator.
+ */
 template <class T>
 class Point {
 protected:
@@ -113,6 +187,22 @@ ostream& operator<<(ostream& s, Point<T>& p) {
     return s;
 }
 
+
+/**
+ * Description:
+ * The Math class is used to simplify the math calculations throughout the project.
+ * To find the square root of a number write "Math::square root(numberToTakeSquareRootOf)".
+ * To round a number write "Math::round(numberToRound)".
+ *
+ *
+ * Constructors:
+ * - N/A
+ *
+ * Methods:
+ * - squareroot(double number); Calculates the square root of a double.
+ * - round(double var); Rounds a double.
+ * - abs(double number); Finds the absolute value of a number.
+ */
 template <class T>
 class Math {
 public:
@@ -145,7 +235,6 @@ double Math<T>::squareroot(T number) {
             r = mid;
         }
     }
-//    cout << "This is a test of squareroot: " << l << endl;
     return l;
 }
 
@@ -174,6 +263,40 @@ double Math<T>::abs(double number) {
     return result;
 }
 
+
+/**
+ * Description:
+ * The LineSegment class is as its name implies. The LineSegment class represents a line segment by containing
+ * two Point values. These point values are stored as class variables for the various functions/methods to use.
+ * x1 represents the x value in P1.
+ * x2 represents the x value in P2.
+ * y1 represents the y value in P1.
+ * y2 represents the y value in P2.
+ *
+ *
+ * Constructors:
+ * - LineSegment (); Default constructor. Should not be used.
+ * - LineSegment (Point one, Point two); Sets the class variables P1 and P2 to the given points.
+ *
+ * Methods:
+ * - length(); Calculates the length of the line segment
+ * - midpoint (); Calculates the midpoint of the line segment.
+ * - xIntercept (); Calculates the xIntercept of the line segment.
+ * - yIntercept (); Calculates the yintercept of the line segment.
+ * - slope (); Calculates the slope of the line segment.
+ * - itIntersects (LineSegment L); Determines (true or false) whether or not the line segment and
+ *   a given line segment intersect.
+ * - intersectionPoint (LineSegment L); Calculates the intersection point of the line segment
+ *   and a given line segment.
+ * - isParallel (LineSegment L); Determines (true or false) whether or not the line segment and
+ *   a given line segment are parallel.
+ * - displayEquation (); Prints the equation of the line segment in the format of y = mx + b.
+ * - getP1 (); A getter function/methed for class variable P1. Returns the first point
+ *   of the line segment.
+ * - getP2 (); A getter function/method for class variable P2. Returns the second point
+ *   of the line segment.
+ * - display(ostream& s); Overloaded << operator.
+ */
 template <class T>
 class LineSegment {
 protected:
@@ -352,7 +475,31 @@ ostream& operator<<(ostream& s, LineSegment<T>& p) {
 }
 
 
-
+/**
+ * Description:
+ * The Segments class holds an array of line segments in order for the line segments
+ * to be organized, displayed, added to, and rotated through for calculations in main().
+ *
+ *
+ * Constructors/Destructors:
+ * - Segments (); Default constructor.
+ * - Segments (int size); Initializes the line segment array, sets count to 0,
+ *   and maxSize to the given size.
+ * - ~Segments(); Destructor
+ *
+ * Methods:
+ * - addLineSegment (LineSegment L); Adds a line segment to the array and increases count by 1.
+ * - removeLineSegment (LineSegment<T> L); Removes a line segment from the array and decreases count by 1.
+ * - display(); Displays the name, points, slope, midpoint, intercepts, length,
+ *   and equation of a line segment.
+ * - getLine (int arrayIndex); A getter function/method for returning a line segment at the
+ *   given index of the array.
+ * - &findAllIntersection(LineSegment<T> ls); Finds all of the line segments that intersect with a given line segment.
+ * - distance (Point<T> P, LineSegment<T> L); Determines the distance between a line and a point.
+ * - findClosest (Point<T>& aPoint); Finds the closest line segment to a given point.
+ * - display(ostream& s); Overloaded << operator.
+ * - getCount(); Returns the number of line segments in Segments.
+ */
 template<class T>
 class Segments {
 protected:
@@ -414,32 +561,27 @@ void Segments<T>::removeLineSegment(LineSegment<T> L) {
         }
     }
     count = newCount;
-    delete[] newArray; //Maybe remove?
+    delete[] newArray;
 }
 
 template <class T>  //Finish
 Segments<T>& Segments<T>::findAllIntersection(LineSegment<T> ls) {
     Segments<T>* intersectingSegments = new Segments(count);
     for ( int i = 0; i < count; i++ )   {
-//        cout << "TESTING: ";
-//        cout << ls.itIntersects(segments[i]) << endl;
         if (ls.itIntersects(segments[i]) && !((ls.getP1().getYValue() == segments[i].getP1().getYValue() &&
-                                               ls.getP1().getXValue() == segments[i].getP1().getXValue()) && (ls.getP2().getYValue() == segments[i].getP2().getYValue() &&
-                                                                                                              ls.getP2().getXValue() == segments[i].getP2().getXValue())))   {
+        ls.getP1().getXValue() == segments[i].getP1().getXValue()) && (ls.getP2().getYValue() == segments[i].getP2().getYValue() &&
+        ls.getP2().getXValue() == segments[i].getP2().getXValue())))   {
             // &&'s are to make sure segment[i] does not equal ls by comparing all of its given points
-//            cout<< "What line segment: " << i << endl;
             intersectingSegments->addLineSegment(segments[i]);
-//            cout << "Count " << intersectingSegments.count << endl;
         }
     }
-//    cout << "HIT";
     return *intersectingSegments;
 }
 
 template <class T>
 double Segments<T>::distance(Point<T> P, LineSegment<T> L) {
     double x0, y0, m, c;
-    double temp, denominator, numerator;
+    double denominator, numerator;
     double distance;
     x0 = P.getXValue();
     y0 = P.getYValue();
@@ -457,7 +599,6 @@ template <class T>
 LineSegment<T> & Segments<T>::findClosest(Point<T> &aPoint) {
     double closestDistance = distance(aPoint, segments[0]);
     LineSegment<T>* closestSegment = &segments[0];
-//    cout << closestSegment << endl;
     double fightingDisctance = distance(aPoint, segments[1]);
     LineSegment<T>* fightingSegment = &segments[1];
 
@@ -465,10 +606,8 @@ LineSegment<T> & Segments<T>::findClosest(Point<T> &aPoint) {
         fightingDisctance = distance(aPoint, segments[i]);
         fightingSegment = &segments[i];
         if ( fightingDisctance < closestDistance )   {
-//            cout << "Fighter: \n" << segments[i] << endl;
             closestDistance = fightingDisctance;
             closestSegment = &segments[i];
-//            cout << "Winner: \n" << closestSegment << endl;
         }
     }
 
@@ -484,21 +623,6 @@ void Segments<T>::display() {
     for ( int i = 0; i < count; i++ )   {
         cout << "Line Segment " << segmentCounter << ":" << endl; // Line Segment #:
         cout << segments[i] << endl;
-//        cout << "(" << Math<T>::round(segments[i].getP1().getXValue()) << ", " << Math<T>::round(segments[i].getP1().getYValue()) << "),(" <<
-//             Math<T>::round(segments[i].getP2().getXValue()) << ", " << Math<T>::round(segments[i].getP2().getYValue()) << ")" << endl;
-//        // (x, y),(x, y)
-//
-//        cout << "Slope:" << Math<T>::round(segments[i].slope()) << endl; // Slope:m
-//
-//        cout << "Midpoint:";
-//        segments[i].midpoint().display(); //Midpoint:(x, y)
-//
-//        cout << "X Intercept:" << Math<T>::round(segments[i].xIntercept()) << endl; // X Intercept:x
-//        cout << "Y Intercept:" << Math<T>::round(segments[i].yIntercept()) << endl; // Y Intercept:y
-//
-//        cout << "Length:" << Math<T>::round(segments[i].length()) << endl; // Length:#
-//
-//        segments[i].displayEquation(); // y=mx+b
         segmentCounter = segmentCounter + 1;
     }
 }
@@ -511,7 +635,7 @@ LineSegment<T> Segments<T>::getLine(int arrayIndex) {
 template <class T>
 Segments<T>::~Segments() {
 //    cout << "Destructor Called" << endl;
-//    delete []segments;
+    delete []segments;
 }
 
 template <class T>
