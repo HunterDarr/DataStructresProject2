@@ -419,7 +419,7 @@ double Segments<T>::distance(Point<T> P, LineSegment<T> L) {
     m = L.slope();
     c = L.yIntercept();//Assume yIntercept function returns double value. If yIntercept function returns Point, c = L.yIntercept().getYvalue(); Just be consistent with the function in Project 1.
     denominator = Math<T>::squareroot(1 + (m * m));
-    double pre = m*x0 + y0 + c;
+    double pre = m*x0 - y0 + c;
     numerator = Math<T>::abs(pre);
 
     distance = numerator/denominator;
@@ -427,7 +427,7 @@ double Segments<T>::distance(Point<T> P, LineSegment<T> L) {
 }
 
 template <class T>
-LineSegment<T> & Segments<T>::findClosest(Point<T> &aPoint) {
+LineSegment<T> & Segments<T>::findClosest(Point<T> &aPoint) {  // TODO BROKEN NEEDS TO BE FIXED
     double closestDistance = distance(aPoint, segments[0]);
     LineSegment<T> closestSegment = segments[0];
 //    cout << closestSegment << endl;
@@ -448,6 +448,7 @@ LineSegment<T> & Segments<T>::findClosest(Point<T> &aPoint) {
     return closestSegment;
 
 }
+
 
 
 template<class T>
@@ -531,7 +532,7 @@ int main() {
     newarray.display();
 
     cout << "\n\n\n\n\n" << "findClosest: " << endl;  //Finish
-    Point<double> closest(2.8,3.6);
+    Point<double> closest(1,3);
     LineSegment<double> newSegment = interval.findClosest(closest);
     cout << newSegment;
 
