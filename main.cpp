@@ -412,6 +412,7 @@ void Segments<T>::removeLineSegment(LineSegment<T> L) {
         }
     }
     count = newCount;
+    delete[] newArray; //Maybe remove?
 }
 
 template <class T>  //Finish
@@ -519,7 +520,7 @@ void Segments<T>::display(ostream &s) {
 
 template <class T>
 int Segments<T>::getCount() {
-    
+    return count;
 }
 
 template <class T>
@@ -549,6 +550,7 @@ int main() {
                 Point<double> pointTwo (linePoint3, linePoint4);
                 LineSegment<double> line (pointOne, pointTwo);
                 segments.addLineSegment(line); // Adds the new line segment to the Segments class's array
+                cout << "Line segment added\n" << endl;
                 break;
             }
             case 'R': {
@@ -557,10 +559,12 @@ int main() {
                 Point<double> pointTwo (linePoint3, linePoint4);
                 LineSegment<double> line (pointOne, pointTwo);
                 segments.removeLineSegment(line);
+                cout << "Line segment removed\n" << endl;
                 break;
             }
             case 'D': {
-                for ( int i = 0; )
+                    cout << segments << endl;
+                break;
             }
             case 'P': {}
             case 'I': {}
