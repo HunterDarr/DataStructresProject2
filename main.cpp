@@ -40,7 +40,7 @@ LineSegmentException::LineSegmentException(string newException) {
 }
 
 string LineSegmentException::getMessage() {
-    return "\n--=={Line Segment Exception: " + message + "}==--\n";
+    return "\n--=={Line Segment Exception: " + message + "}==--\n";  //TODO Change this to Exception,line segment not found
 }
 
 class SegmentsException: public Exception {
@@ -122,6 +122,7 @@ class Math {
 public:
     static double squareroot(T number);
     static T round(T var);
+    static double abs(double number);
 };
 
 template <class T>
@@ -159,6 +160,15 @@ T Math<T>::round(T var) {
     T value = (int)(var * 100.0);
     T result = (double)value / 100.0;
 //    cout << "This is a test of round: " << result << endl;
+    return result;
+}
+
+template <class T>
+double Math<T>::abs(double number) {
+    double result = number;
+    if (number < 0)   {
+        result = (number * -1);
+    }
     return result;
 }
 
@@ -355,6 +365,8 @@ public:
     void display();
     LineSegment<T> getLine (int arrayIndex);
     Segments<T> &findAllIntersection(LineSegment<T> ls);
+    double distance (Point<T> P, LineSegment<T> L);
+    LineSegment<T>& findClosest (Point<T>& aPoint);
     void display(ostream& s);
 };
 
@@ -382,19 +394,64 @@ template <class T>  //Finish
 Segments<T>& Segments<T>::findAllIntersection(LineSegment<T> ls) {
     Segments<T> intersectingSegments(count);
     for ( int i = 0; i < count; i++ )   {
-        cout << "TESTING: ";
-        cout << ls.itIntersects(segments[i]) << endl;
+//        cout << "TESTING: ";
+//        cout << ls.itIntersects(segments[i]) << endl;
         if (ls.itIntersects(segments[i]) && !((ls.getP1().getYValue() == segments[i].getP1().getYValue() &&
         ls.getP1().getXValue() == segments[i].getP1().getXValue()) && (ls.getP2().getYValue() == segments[i].getP2().getYValue() &&
         ls.getP2().getXValue() == segments[i].getP2().getXValue())))   {
             // &&'s are to make sure segment[i] does not equal ls by comparing all of its given points
-            cout<< "What line segment: " << i << endl;
+//            cout<< "What line segment: " << i << endl;
             intersectingSegments.addLineSegment(segments[i]);
-            cout << "Count " << intersectingSegments.count << endl;
+//            cout << "Count " << intersectingSegments.count << endl;
         }
     }
 //    cout << "HIT";
     return intersectingSegments;
+}
+
+template <class T>
+double Segments<T>::distance(Point<T> P, LineSegment<T> L) {
+    double x0, y0, m, c;
+    double temp, denominator, numerator;
+    double distance;
+    x0 = P.getXValue();
+    y0 = P.getYValue();
+    m = L.slope();
+    c = L.yIntercept();//Assume yIntercept function returns double value. If yIntercept function returns Point, c = L.yIntercept().getYvalue(); Just be consistent with the function in Project 1.
+    denominator = Math<T>::squareroot(1 + (m * m));
+//cout << "Distance called" << endl;
+//    numerator = m*x0 + y0 + c; //Testing only
+//    cout << "Numerator test 1: " << numerator << endl;
+
+    numerator = Math<T>::abs(m*x0 + y0 + c);
+//    cout << "Numerator test 2: " << numerator << endl;
+
+    distance = numerator/denominator;
+//    cout << "final distance: " << distance << endl;
+    return distance;
+}
+
+template <class T>
+LineSegment<T> & Segments<T>::findClosest(Point<T> &aPoint) {
+    double closestDistance = distance(aPoint, segments[0]);
+    LineSegment<T> closestSegment = segments[0];
+//    cout << closestSegment << endl;
+    double fightingDisctance = distance(aPoint, segments[1]);
+    LineSegment<T> fightingSegment = segments[1];
+
+    for ( int i = 1; i < count; i++ )   {
+        fightingDisctance = distance(aPoint, segments[i]);
+        fightingSegment = segments[i];
+        if ( fightingDisctance < closestDistance )   {
+//            cout << "Fighter: \n" << segments[i] << endl;
+            closestDistance = fightingDisctance;
+            closestSegment = segments[i];
+//            cout << "Winner: \n" << closestSegment << endl;
+        }
+    }
+
+    return closestSegment;
+
 }
 
 
@@ -430,7 +487,8 @@ LineSegment<T> Segments<T>::getLine(int arrayIndex) {
 
 template <class T>
 Segments<T>::~Segments() {
-    delete []segments;
+    cout << "Destructor Called" << endl;
+//    delete []segments;
 }
 
 template <class T>
@@ -476,6 +534,12 @@ int main() {
     cout << "\n\n\n\n\n\n\n" << "findAllInterects:" << endl;
     Segments<double> newarray = interval.findAllIntersection(interval.getLine(3));
     newarray.display();
+
+    cout << "\n\n\n\n\n" << "findClosest: " << endl;  //Finish
+    Point<double> closest(2.8,3.6);
+    LineSegment<double> newSegment = interval.findClosest(closest);
+    cout << newSegment;
+
 
 
 //
