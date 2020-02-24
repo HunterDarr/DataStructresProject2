@@ -1,10 +1,6 @@
 #include <iostream>
 using namespace std;
 
-//template <typename T>
-//void test (T x, T y)   {
-//    cout << x << " " << y << endl;
-//}
 
 
 class Exception {
@@ -40,7 +36,7 @@ LineSegmentException::LineSegmentException(string newException) {
 }
 
 string LineSegmentException::getMessage() {
-    return "\n--=={Line Segment Exception: " + message + "}==--\n";  //TODO Change this to Exception,line segment not found
+    return "\n--=={Line Segment Exception: " + message + "}==--\n";  //TODO Might need to change this
 }
 
 class SegmentsException: public Exception {
@@ -411,7 +407,7 @@ void Segments<T>::removeLineSegment(LineSegment<T> L) {
     for ( int i = 0; i < count; i++ )   {
         if (!((L.getP1().getYValue() == newArray[i].getP1().getYValue() &&
                L.getP1().getXValue() == newArray[i].getP1().getXValue()) &&
-               (L.getP2().getYValue() == newArray[i].getP2().getYValue() &&
+              (L.getP2().getYValue() == newArray[i].getP2().getYValue() &&
                L.getP2().getXValue() == newArray[i].getP2().getXValue())))   {
             segments[newCount] = newArray[i];
             newCount = newCount + 1;
@@ -423,21 +419,21 @@ void Segments<T>::removeLineSegment(LineSegment<T> L) {
 
 template <class T>  //Finish
 Segments<T>& Segments<T>::findAllIntersection(LineSegment<T> ls) {
-    Segments<T> intersectingSegments(count);
+    Segments<T>* intersectingSegments = new Segments(count);
     for ( int i = 0; i < count; i++ )   {
 //        cout << "TESTING: ";
 //        cout << ls.itIntersects(segments[i]) << endl;
         if (ls.itIntersects(segments[i]) && !((ls.getP1().getYValue() == segments[i].getP1().getYValue() &&
-        ls.getP1().getXValue() == segments[i].getP1().getXValue()) && (ls.getP2().getYValue() == segments[i].getP2().getYValue() &&
-        ls.getP2().getXValue() == segments[i].getP2().getXValue())))   {
+                                               ls.getP1().getXValue() == segments[i].getP1().getXValue()) && (ls.getP2().getYValue() == segments[i].getP2().getYValue() &&
+                                                                                                              ls.getP2().getXValue() == segments[i].getP2().getXValue())))   {
             // &&'s are to make sure segment[i] does not equal ls by comparing all of its given points
 //            cout<< "What line segment: " << i << endl;
-            intersectingSegments.addLineSegment(segments[i]);
+            intersectingSegments->addLineSegment(segments[i]);
 //            cout << "Count " << intersectingSegments.count << endl;
         }
     }
 //    cout << "HIT";
-    return intersectingSegments;
+    return *intersectingSegments;
 }
 
 template <class T>
@@ -458,25 +454,25 @@ double Segments<T>::distance(Point<T> P, LineSegment<T> L) {
 }
 
 template <class T>
-LineSegment<T> & Segments<T>::findClosest(Point<T> &aPoint) {  // TODO BROKEN NEEDS TO BE FIXED
+LineSegment<T> & Segments<T>::findClosest(Point<T> &aPoint) {
     double closestDistance = distance(aPoint, segments[0]);
-    LineSegment<T> closestSegment = segments[0];
+    LineSegment<T>* closestSegment = &segments[0];
 //    cout << closestSegment << endl;
     double fightingDisctance = distance(aPoint, segments[1]);
-    LineSegment<T> fightingSegment = segments[1];
+    LineSegment<T>* fightingSegment = &segments[1];
 
     for ( int i = 1; i < count; i++ )   {
         fightingDisctance = distance(aPoint, segments[i]);
-        fightingSegment = segments[i];
+        fightingSegment = &segments[i];
         if ( fightingDisctance < closestDistance )   {
 //            cout << "Fighter: \n" << segments[i] << endl;
             closestDistance = fightingDisctance;
-            closestSegment = segments[i];
+            closestSegment = &segments[i];
 //            cout << "Winner: \n" << closestSegment << endl;
         }
     }
 
-    return closestSegment;
+    return *closestSegment;
 
 }
 
@@ -569,7 +565,7 @@ int main() {
                     for (int i = 0; i < segments.getCount(); i++ ){
                         if (((segments.getLine(i).getP1().getYValue() == line.getP1().getYValue() &&
                               segments.getLine(i).getP1().getXValue() == line.getP1().getXValue()) && (segments.getLine(i).getP2().getYValue() == line.getP2().getYValue() &&
-                              segments.getLine(i).getP2().getXValue() == line.getP2().getXValue())))   {
+                                                                                                       segments.getLine(i).getP2().getXValue() == line.getP2().getXValue())))   {
                             segments.removeLineSegment(line);
                             cout << "Line segment removed\n" << endl;
                             throwException = false;
@@ -589,7 +585,7 @@ int main() {
 
             }
             case 'D': {
-                    cout << segments << endl;
+                cout << segments << endl;
                 break;
             }
             case 'P': {
@@ -605,8 +601,8 @@ int main() {
                 for ( int i = 0; i < segments.getCount(); i++)   {
                     for (int j = 0; j < segments.findAllIntersection(line).getCount(); j++ )   {
                         if (((segments.getLine(i).getP1().getYValue() == segments.findAllIntersection(line).getLine(j).getP1().getYValue() &&
-                                segments.getLine(i).getP1().getXValue() == segments.findAllIntersection(line).getLine(j).getP1().getXValue()) && (segments.getLine(i).getP2().getYValue() == segments.findAllIntersection(line).getLine(j).getP2().getYValue() &&
-                                segments.getLine(i).getP2().getXValue() == segments.findAllIntersection(line).getLine(j).getP2().getXValue())))   {
+                              segments.getLine(i).getP1().getXValue() == segments.findAllIntersection(line).getLine(j).getP1().getXValue()) && (segments.getLine(i).getP2().getYValue() == segments.findAllIntersection(line).getLine(j).getP2().getYValue() &&
+                                                                                                                                                segments.getLine(i).getP2().getXValue() == segments.findAllIntersection(line).getLine(j).getP2().getXValue())))   {
                             cout << "Line segment " << i + 1 << endl;
                         }
                     }
@@ -622,8 +618,8 @@ int main() {
                 for (int i = 0; i < segments.getCount(); i++ )   {
                     if (((segments.getLine(i).getP1().getYValue() == segments.findClosest(pointOne).getP1().getYValue() &&
                           segments.getLine(i).getP1().getXValue() == segments.findClosest(pointOne).getP1().getXValue()) && (segments.getLine(i).getP2().getYValue() == segments.findClosest(pointOne).getP2().getYValue() &&
-                          segments.getLine(i).getP2().getXValue() == segments.findClosest(pointOne).getP2().getXValue())))   {
-                        cout << "Line segment " << i + 1 << endl; //TODO MIGHT NEED TO CHANGE
+                                                                                                                             segments.getLine(i).getP2().getXValue() == segments.findClosest(pointOne).getP2().getXValue())))   {
+                        cout << "Line segment " << i + 1 << endl;
                     }
                 }
                 break;
@@ -632,82 +628,5 @@ int main() {
             default: cout << "Invalid command" << endl;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    double linePoint1; // x value of a point
-//    double linePoint2; // y value of a point
-//    double linePoint3; // x value of a point
-//    double linePoint4; // y value of a point
-//    int numberOfLines; // Number of line segments to be input
-//
-//    cin >> numberOfLines; // Inputs the number of line segments to be input
-//
-//    Segments<double> interval (numberOfLines); // Constructor for Intervals
-//
-//    for ( int i = 0; i < numberOfLines; i++ )   {
-//        cin >> linePoint1 >> linePoint2 >> linePoint3 >> linePoint4; // Inputs the x and y values of a line segment
-//        Point<double> pointOne (linePoint1, linePoint2);
-//        Point<double> pointTwo (linePoint3, linePoint4);
-////        cout << "TEST OF POINT COUT: " << pointOne << endl; // TESTING CODE SDOJHFDISOHF
-//        LineSegment<double> line (pointOne, pointTwo);
-////        cout << "TESTING LINESEGMENT COUT: \n" << line << endl;
-//        interval.addLineSegment(line); // Adds the new line segment to the Interval class's array
-//    }
-//    cout << "Testing <<: \n" << interval << endl;
-//    interval.display(); // Displays the information about the line segments
-//
-//
-//    cout << "\n\n\n\n\n\n\n" << "findAllInterects:" << endl;
-//    Segments<double> newarray = interval.findAllIntersection(interval.getLine(3));
-//    newarray.display();
-//
-//    cout << "\n\n\n\n\n" << "findClosest: " << endl;  //Finish
-//    Point<double> closest(1,3);
-//    LineSegment<double> newSegment = interval.findClosest(closest);
-//    cout << newSegment;
-
-
-
-//
-//    bool doesIntersect = false;
-//    int jCounter = 1; /* Keeps track of j so that every time j's for loop is called
-// * it starts 1 higher than the previous time */
-//
-//    for ( int i = 0; i < numberOfLines; i++ )   {
-//        for ( int j = jCounter; j < numberOfLines; j++ )   { // j's for loop compares line segments to i's line segment
-//            if (!(i == j))   {
-//                doesIntersect = interval.getLine(i).itIntersects(interval.getLine(j));
-//                if (doesIntersect)   {
-//                    cout << "The line segments compared are segments[" << i << "] and segments[" << j <<
-//                         "]: Intersection Point :";
-//                    interval.getLine(i).intersectionPoint(interval.getLine(j)).display();
-//                }
-//                else if (!doesIntersect && !interval.getLine(i).isParallel(interval.getLine(j)))   {
-//                    cout << "The line segments compared are segments[" << i << "] and segments[" << j <<
-//                         "]: Not Parallel and not Intersecting" << endl;
-//                }
-//                else {
-//                    cout << "The line segments compared are segments[" << i << "] and segments[" << j <<
-//                         "]: Lines are Parallel" << endl;
-//                }
-//            }
-//        }
-//        jCounter = jCounter + 1;
-//    }
     return 0;
 }
