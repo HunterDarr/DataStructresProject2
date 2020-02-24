@@ -362,12 +362,14 @@ public:
     Segments (int size); //non-default constructor
     ~Segments();
     void addLineSegment (LineSegment<T> L);
+    void removeLineSegment (LineSegment<T> L);
     void display();
     LineSegment<T> getLine (int arrayIndex);
     Segments<T> &findAllIntersection(LineSegment<T> ls);
     double distance (Point<T> P, LineSegment<T> L);
     LineSegment<T>& findClosest (Point<T>& aPoint);
     void display(ostream& s);
+    int getCount();
 };
 
 template<class T>
@@ -388,6 +390,28 @@ template<class T>
 void Segments<T>::addLineSegment(LineSegment<T> L) {
     segments[count] = L; //Adds a new line segment in the array at index count.
     count = count + 1; //Increases count by 1.
+}
+
+template <class T>
+void Segments<T>::removeLineSegment(LineSegment<T> L) {
+    LineSegment<T>* newArray = new LineSegment<T> [maxSize];
+    int newCount = 0;
+
+    for ( int i = 0; i < count; i++ )   {
+        newArray[i] = segments[i];
+    }
+    segments = new LineSegment<T> [maxSize];
+
+    for ( int i = 0; i < count; i++ )   {
+        if (!((L.getP1().getYValue() == newArray[i].getP1().getYValue() &&
+               L.getP1().getXValue() == newArray[i].getP1().getXValue()) &&
+               (L.getP2().getYValue() == newArray[i].getP2().getYValue() &&
+               L.getP2().getXValue() == newArray[i].getP2().getXValue())))   {
+            segments[newCount] = newArray[i];
+            newCount = newCount + 1;
+        }
+    }
+    count = newCount;
 }
 
 template <class T>  //Finish
@@ -494,6 +518,11 @@ void Segments<T>::display(ostream &s) {
 }
 
 template <class T>
+int Segments<T>::getCount() {
+    
+}
+
+template <class T>
 ostream& operator<<(ostream& s, Segments<T>& p) {
     p.display(s);
     return s;
@@ -503,38 +532,90 @@ ostream& operator<<(ostream& s, Segments<T>& p) {
 
 
 int main() {
-
     double linePoint1; // x value of a point
     double linePoint2; // y value of a point
     double linePoint3; // x value of a point
     double linePoint4; // y value of a point
-    int numberOfLines; // Number of line segments to be input
-
-    cin >> numberOfLines; // Inputs the number of line segments to be input
-
-    Segments<double> interval (numberOfLines); // Constructor for Intervals
-
-    for ( int i = 0; i < numberOfLines; i++ )   {
-        cin >> linePoint1 >> linePoint2 >> linePoint3 >> linePoint4; // Inputs the x and y values of a line segment
-        Point<double> pointOne (linePoint1, linePoint2);
-        Point<double> pointTwo (linePoint3, linePoint4);
-//        cout << "TEST OF POINT COUT: " << pointOne << endl; // TESTING CODE SDOJHFDISOHF
-        LineSegment<double> line (pointOne, pointTwo);
-//        cout << "TESTING LINESEGMENT COUT: \n" << line << endl;
-        interval.addLineSegment(line); // Adds the new line segment to the Interval class's array
+    char command;
+    int noOfSegments;
+    cin >> noOfSegments;
+    Segments<double> segments (noOfSegments); // Constructor for Segments
+    while (!cin.eof()) {
+        cin >> command;
+        switch (command) {
+            case 'A': {
+                cin >> linePoint1 >> linePoint2 >> linePoint3 >> linePoint4; // Inputs the x and y values of a line segment
+                Point<double> pointOne (linePoint1, linePoint2);
+                Point<double> pointTwo (linePoint3, linePoint4);
+                LineSegment<double> line (pointOne, pointTwo);
+                segments.addLineSegment(line); // Adds the new line segment to the Segments class's array
+                break;
+            }
+            case 'R': {
+                cin >> linePoint1 >> linePoint2 >> linePoint3 >> linePoint4; // Inputs the x and y values of a line segment
+                Point<double> pointOne (linePoint1, linePoint2);
+                Point<double> pointTwo (linePoint3, linePoint4);
+                LineSegment<double> line (pointOne, pointTwo);
+                segments.removeLineSegment(line);
+                break;
+            }
+            case 'D': {
+                for ( int i = 0; )
+            }
+            case 'P': {}
+            case 'I': {}
+            case 'C': {}
+            default: cout << "Invalid command" << endl;
+        }
     }
-    cout << "Testing <<: \n" << interval << endl;
-    interval.display(); // Displays the information about the line segments
 
 
-    cout << "\n\n\n\n\n\n\n" << "findAllInterects:" << endl;
-    Segments<double> newarray = interval.findAllIntersection(interval.getLine(3));
-    newarray.display();
 
-    cout << "\n\n\n\n\n" << "findClosest: " << endl;  //Finish
-    Point<double> closest(1,3);
-    LineSegment<double> newSegment = interval.findClosest(closest);
-    cout << newSegment;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    double linePoint1; // x value of a point
+//    double linePoint2; // y value of a point
+//    double linePoint3; // x value of a point
+//    double linePoint4; // y value of a point
+//    int numberOfLines; // Number of line segments to be input
+//
+//    cin >> numberOfLines; // Inputs the number of line segments to be input
+//
+//    Segments<double> interval (numberOfLines); // Constructor for Intervals
+//
+//    for ( int i = 0; i < numberOfLines; i++ )   {
+//        cin >> linePoint1 >> linePoint2 >> linePoint3 >> linePoint4; // Inputs the x and y values of a line segment
+//        Point<double> pointOne (linePoint1, linePoint2);
+//        Point<double> pointTwo (linePoint3, linePoint4);
+////        cout << "TEST OF POINT COUT: " << pointOne << endl; // TESTING CODE SDOJHFDISOHF
+//        LineSegment<double> line (pointOne, pointTwo);
+////        cout << "TESTING LINESEGMENT COUT: \n" << line << endl;
+//        interval.addLineSegment(line); // Adds the new line segment to the Interval class's array
+//    }
+//    cout << "Testing <<: \n" << interval << endl;
+//    interval.display(); // Displays the information about the line segments
+//
+//
+//    cout << "\n\n\n\n\n\n\n" << "findAllInterects:" << endl;
+//    Segments<double> newarray = interval.findAllIntersection(interval.getLine(3));
+//    newarray.display();
+//
+//    cout << "\n\n\n\n\n" << "findClosest: " << endl;  //Finish
+//    Point<double> closest(1,3);
+//    LineSegment<double> newSegment = interval.findClosest(closest);
+//    cout << newSegment;
 
 
 
