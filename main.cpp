@@ -54,7 +54,7 @@ SegmentsException::SegmentsException(string newException) {
 }
 
 string SegmentsException::getMessage() {
-    return "\n--=={Segments Exception: " + message + "}==--\n";
+    return "Exception," + message + "\n";
 }
 
 
@@ -508,7 +508,7 @@ LineSegment<T> Segments<T>::getLine(int arrayIndex) {
 
 template <class T>
 Segments<T>::~Segments() {
-    cout << "Destructor Called" << endl;
+//    cout << "Destructor Called" << endl;
 //    delete []segments;
 }
 
@@ -558,6 +558,19 @@ int main() {
                 Point<double> pointOne (linePoint1, linePoint2);
                 Point<double> pointTwo (linePoint3, linePoint4);
                 LineSegment<double> line (pointOne, pointTwo);
+                try    {
+                    for (int i = 0; i < segments.getCount(); i++ ){
+                        if (!((segments.getLine(i).getP1().getYValue() == line.getP1().getYValue() &&
+                              segments.getLine(i).getP1().getXValue() == line.getP1().getXValue()) && (segments.getLine(i).getP2().getYValue() == line.getP2().getYValue() &&
+                              segments.getLine(i).getP2().getXValue() == line.getP2().getXValue())))   {
+                            throw SegmentsException("line segment not found");
+                        }
+                    }
+                }
+                catch (SegmentsException e)   {
+                    cout << e.getMessage() << endl;
+                    break;
+                }
                 segments.removeLineSegment(line);
                 cout << "Line segment removed\n" << endl;
                 break;
@@ -566,8 +579,27 @@ int main() {
                     cout << segments << endl;
                 break;
             }
-            case 'P': {}
-            case 'I': {}
+            case 'P': {
+                cout << "Command P not implemented" << endl;
+                break;
+            }
+            case 'I': {
+                cout << "The lines segments intersecting with the given line segment are:" << endl;
+                cin >> linePoint1 >> linePoint2 >> linePoint3 >> linePoint4; // Inputs the x and y values of a line segment
+                Point<double> pointOne (linePoint1, linePoint2);
+                Point<double> pointTwo (linePoint3, linePoint4);
+                LineSegment<double> line (pointOne, pointTwo);
+                for ( int i = 0; i < segments.getCount(); i++)   {
+                    for (int j = 0; j < segments.findAllIntersection(line).getCount(); j++ )   {
+                        if (((segments.getLine(i).getP1().getYValue() == segments.findAllIntersection(line).getLine(j).getP1().getYValue() &&
+                                segments.getLine(i).getP1().getXValue() == segments.findAllIntersection(line).getLine(j).getP1().getXValue()) && (segments.getLine(i).getP2().getYValue() == segments.findAllIntersection(line).getLine(j).getP2().getYValue() &&
+                                segments.getLine(i).getP2().getXValue() == segments.findAllIntersection(line).getLine(j).getP2().getXValue())))   {
+                            cout << "Line segment " << i + 1 << endl;
+                        }
+                    }
+                }
+                break;
+            }
             case 'C': {}
             default: cout << "Invalid command" << endl;
         }
